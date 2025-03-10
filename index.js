@@ -47,9 +47,9 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post("/send-mail", async (req, res) => {
-  const { to, cc, bcc, subject, text, html } = req.body;
+  const {name,email,phone,message } = req.body;
 
-  if (!to || !subject || (!text && !html)) {
+  if (!name || !email || (!phone && !message)) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
@@ -57,9 +57,7 @@ app.post("/send-mail", async (req, res) => {
     let info = await transporter.sendMail({
      from: `"${name}" <${email}>`,
       to:"softech.vire@gmail.com",
-      cc,
-      bcc,
-      subject: "New Contact Form Submission",
+      subject: `JMVX.Solution:Contact Form Submission${name}`,
       text: `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nMessage: ${message}`,
       html: `<h2>New Contact Form Submission</h2>
              <p><strong>Name:</strong> ${name}</p>
