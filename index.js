@@ -2,12 +2,13 @@ const express = require("express");
 const { SMTPServer } = require("smtp-server");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 const smtpServer = new SMTPServer({
   authOptional: true,
   onData(stream, session, callback) {
