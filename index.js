@@ -55,13 +55,17 @@ app.post("/send-mail", async (req, res) => {
 
   try {
     let info = await transporter.sendMail({
-      from: ['"Virendra Yadav" <softech.vire@gmail.com>', '"Alternet Sender" <alternate@example.com>'],
-      to,
+     from: `"${name}" <${email}>`,
+      to:"softech.vire@gmail.com",
       cc,
       bcc,
-      subject,
-      text,
-      html,
+      subject: "New Contact Form Submission",
+      text: `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nMessage: ${message}`,
+      html: `<h2>New Contact Form Submission</h2>
+             <p><strong>Name:</strong> ${name}</p>
+             <p><strong>Phone:</strong> ${phone}</p>
+             <p><strong>Email:</strong> ${email}</p>
+             <p><strong>Message:</strong> ${message}</p>`,
     });
 
     console.log("📧 Email sent:", info.messageId);
