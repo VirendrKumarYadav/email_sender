@@ -57,8 +57,8 @@ app.post("/send-mail", async (req, res) => {
   try {
     let info = await transporter.sendMail({
      from: `"${name}" <${email}>`,
-      to:"softech.vire@gmail.com",
-      subject: `JMVX.Solution:Contact Form Submission${name}`,
+      to:"akhilesh@jmvx.solutions",
+      subject: `Form Submission By ${name}`,
       text: `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nMessage: ${message}`,
       html: `<h2>New Contact Form Submission</h2>
              <p><strong>Name:</strong> ${name}</p>
