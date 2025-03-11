@@ -3,7 +3,10 @@ const { SMTPServer } = require("smtp-server");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const multer = require("multer");
 
+
+const upload = multer({ dest: "uploads/" }); 
 dotenv.config();
 
 const app = express();
@@ -75,6 +78,41 @@ app.post("/send-mail", async (req, res) => {
   }
 });
 
+
+app.post("/send-career-mail", upload.single("file"), async (req, res) => {
+    const { name, email, phone, details } = req.body;
+    const file = req.file;
+
+    if (!name || !email || !phone || !details || !file) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    try {
+        let info = await transporter.sendMail({
+            from: `"${name}" <${email}>`,
+            to: "akhilesh@jmvx.solutions",
+            subject: `Career Form Submission from ${name}`,
+            text: `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nDetails: ${details}`,
+            html: `<h2>New Career Submission</h2>
+                   <p><strong>Name:</strong> ${name}</p>
+                   <p><strong>Phone:</strong> ${phone}</p>
+                   <p><strong>Email:</strong> ${email}</p>
+                   <p><strong>Details:</strong> ${details}</p>`,
+            attachments: [
+                {
+                    filename: file.originalname,
+                    path: file.path,
+                },
+            ],
+        });
+
+        console.log("📧 Career Form Email Sent:", info.messageId);
+        res.json({ message: "Career form submitted successfully!", messageId: info.messageId });
+    } catch (error) {
+        console.error("❌ Error sending email:", error);
+        res.status(500).json({ error: "Failed to send email" });
+    }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Express server running on port ${PORT}`);
